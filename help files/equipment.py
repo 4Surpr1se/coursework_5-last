@@ -1,6 +1,5 @@
 from dataclasses import dataclass
 from typing import List, Union, Any
-from random import uniform
 import marshmallow_dataclass
 import marshmallow
 import json
@@ -21,6 +20,7 @@ class Weapon:
     min_damage: float
     max_damage: float
     stamina_per_hit: float
+
 
 @dataclass
 class EquipmentData:
@@ -71,4 +71,3 @@ equipment = {
     'weapons': Equipment().get_weapons_names(),
     'armors': Equipment().get_armors_names()
 }
-# print(equipment)

@@ -32,7 +32,7 @@ class Skill(ABC):
     def skill_effect(self) -> str:
         pass
 
-    def _is_stamina_enough(self):
+    def _is_stamina_enough(self) -> bool:
         return self.user.stamina > self.stamina
 
     def use(self, user: BaseUnit, target: BaseUnit) -> str:
@@ -42,7 +42,7 @@ class Skill(ABC):
         """
         self.user = user
         self.target = target
-        if self._is_stamina_enough:
+        if self._is_stamina_enough():
             return self.skill_effect()
         return f"{self.user.name} попытался использовать {self.name} но у него не хватило выносливости."
 
@@ -54,21 +54,20 @@ class FuryPunch(Skill):
 
     def skill_effect(self) -> str:
         self.user.stamina -= self.stamina
-        self.target.hp -= self.damage
-        return f'Навык{self.name} игрока {self.user.name} успешно нанес {self.damage} противнику.'
-        # TODO логика использования скилла -> return str
-        # TODO в классе нам доступны экземпляры user и target - можно использовать любые их методы
-        # TODO именно здесь происходит уменшение стамины у игрока применяющего умение и
-        # TODO уменьшение здоровья цели.
-        # TODO результат применения возвращаем строкой
+        self.target.hp = round(self.target.hp - self.damage, 2)
+        return f'Навык {self.name} игрока {self.user.name} успешно нанес {self.damage} противнику.'
 
 
 class HardShot(Skill):
     name = 'Меткий выстрел'
-    stamina = 2
+    stamina = 20
     damage = 8
 
     def skill_effect(self) -> str:
         self.user.stamina -= self.stamina
-        self.target.hp -= self.damage
-        return f'Навык{self.name} игрока {self.user.name} успешно нанес {self.damage} противнику.'
+        self.target.hp = round(self.target.hp - self.damage, 2)
+        return f'Навык {self.name} игрока {self.user.name} успешно нанес {self.damage} противнику.'
+
+
+fury_punch = FuryPunch()
+hard_shot = HardShot()
